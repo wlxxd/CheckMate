@@ -27,7 +27,7 @@ SLEEP 3
 
 echo Delete all files that you do not want to be discovered beforehand. The traces are automatically removed.
 
-set /p DUMMY=Starten? FiveM und Verlaufsdateien werden gelöscht. 
+set /p DUMMY=Start? FiveM and any history files will be deleted. 
 
 tasklist /fi "ImageName eq FiveM.exe" /fo csv 2>NUL | find /I "FiveM.exe">NUL
 if "%ERRORLEVEL%"=="0" echo FiveM not closed! Ending task...
