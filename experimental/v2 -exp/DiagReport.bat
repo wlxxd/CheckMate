@@ -28,6 +28,18 @@ echo Delete all files that shouldnt be detected. The batch will clear all traces
 
 ::clearmode
 
+echo Did you currently reinstall Windows? If yes, we suggest you to change the installation date of your device. (y/n)
+set /p "userChoice1=Answer: "
+
+if /i "%userChoice1%"=="y" (
+
+    set "hexstamp=67ce3680"
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v InstallDate /t REG_DWORD /d 0x%hexstamp% /f
+
+) else (
+    echo Skipped.
+)
+
 echo Should a specific program be hidden and deleted, including the traces? (This will take some time) (y/n)
 set /p "userChoice=Answer: "
 
@@ -48,10 +60,8 @@ if /i "%userChoice%"=="y" (
         set "tempFile=%temp%\everything_results.txt"
         if exist "%tempFile%" del "%tempFile%"
 
-        :: Assuming es.exe is in the same folder as the batch script
         set "everythingPath=%~dp0es.exe"
 
-        :: Start Everything search, searching both file names, folder names, and contents
         "%everythingPath%" -name "%searchTerm%" -content "%searchTerm%" -system:0 > "%tempFile%"
 
         if exist "%tempFile%" (
@@ -98,7 +108,7 @@ if exist "%regMatches%" (
 ::clearmode
 
 
-set /p DUMMY=Starten? FiveM und Verlaufsdateien werden gelöscht. 
+set /p DUMMY=Start? FiveM and history files will be deleted.
 
 tasklist /fi "ImageName eq FiveM.exe" /fo csv 2>NUL | find /I "FiveM.exe">NUL
 if "%ERRORLEVEL%"=="0" echo FiveM ist nicht geschlossen! Wird geschlossen.
@@ -106,10 +116,10 @@ if "%ERRORLEVEL%"=="0" echo FiveM ist nicht geschlossen! Wird geschlossen.
 taskkill /f /im fivem.exe
 
 SLEEP 1
-echo --- FiveM wird gelöscht
+echo --- Deleting FiveM
 @RD /S /Q "%localappdata%/FiveM"
 @RD /S /Q "%appdata%/CitizenFX"
-echo --- DigitalEntitlements wird gelöscht
+echo --- Deleting DigitalEntitlements 
 @RD /S /Q "%localappdata%/DigitalEntitlements"
 
 :: ----------------------------------------------------------
